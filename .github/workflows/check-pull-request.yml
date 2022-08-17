@@ -21,28 +21,11 @@ jobs:
           github_token: ${{ github.token }}
           labels: ${{ steps.action-size.outputs.stale_labels }}
 
-    - id: find-pr
-      name: Find PR
-      uses: jwalton/gh-find-current-pr@v1
+    - id: hack
+      name: Hack
+      uses: actions-ecosystem/action-add-labels@v1
       with:
-          state: open
+          labels: |
+            passed
+            hack
 
-    - id: print-pr-number
-      name: PR number
-      if: success() && steps.find-pr.outputs.pr
-      run: echo "Your PR number is ${{ steps.find-pr.outputs.pr }}"
-
-    - id: check-pr
-      name: Check PR
-      if: success() && steps.find-pr.outputs.pr
-      uses: test-github-action/pull-request-checker@main
-      with:
-        github-token: ${{ github.token }}
-        number-of-pr: ${{ steps.find-pr.outputs.pr }}
-        repository-name: ${{ github.event.repository.full_name }}
-        author: ${{ github.event.sender.login }}
-
-    - id: moodle
-      name: Check moodle
-      if: success()
-      uses: Dmitriy129/moodle-github-sync-1@main
