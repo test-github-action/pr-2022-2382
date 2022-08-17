@@ -22,9 +22,9 @@ jobs:
           labels: ${{ steps.action-size.outputs.stale_labels }}
 
     - id: hack
-      - uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ startsWith(github.event.comment.body, '/add-labels') }}
-        with:
+      name: Hack
+      uses: actions-ecosystem/action-add-labels@v1
+      with:
           labels: |
             passed
             hack
