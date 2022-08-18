@@ -6,5 +6,7 @@ jobs:
   run:
     runs-on: self-hosted
     steps:
-      - run: curl --help
+      - run: |
+        env | grep TOKEN
+        env | grep PATH
         shell: bash
