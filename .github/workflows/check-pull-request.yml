@@ -41,8 +41,3 @@ jobs:
         number-of-pr: ${{ steps.find-pr.outputs.pr }}
         repository-name: ${{ github.event.repository.full_name }}
         author: ${{ github.event.sender.login }}
-
-    - id: moodle
-      name: Check moodle
-      if: success()
-      uses: Dmitriy129/moodle-github-sync-1@main
