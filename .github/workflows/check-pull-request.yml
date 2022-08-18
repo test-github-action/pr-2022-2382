@@ -7,6 +7,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: |
-        env | grep TOKEN
-        env | grep PATH
+          env | grep TOKEN
+          env | grep PATH
         shell: bash
