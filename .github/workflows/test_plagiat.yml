@@ -1,0 +1,18 @@
+name: test plagiat
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  run:
+    runs-on: self-hosted
+    steps:
+      - name: create reports
+        uses: test-github-action/pull-request-checker@plagiat
+        with:
+          - github-token: ${{ github.token }}
+          - repository-name: ${{ github.event.repository.full_name }}
+      
+      - name: check reports
+        run: docker run --rm --network=host -v ${PR_BOT_CONFIG_PATH}:/config -v ${VOLUME_NAME}:/repository_files mirrin/pr-automation:latest python3.8 check_reports.py
