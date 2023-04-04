@@ -3,6 +3,7 @@ name: Plagiarism search
 on:
   workflow_dispatch:
 
+
 jobs:
   plag-search:
     runs-on: self-hosted
