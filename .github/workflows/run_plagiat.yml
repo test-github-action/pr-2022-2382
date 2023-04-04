@@ -25,8 +25,8 @@ jobs:
       - name: Merge all branches
         run: |
           cd check_plag
-          git config --global user.email "robot@example.com"
-          git config --global user.name "robot"
+          git config --local user.email "robot@example.com"
+          git config --local user.name "robot"
           git merge $(git branch | tr -s '\r\n*' ' ' | sed -r 's/main//' | sed -r 's/master//') -m "Merge all branches."
         shell: bash
 
