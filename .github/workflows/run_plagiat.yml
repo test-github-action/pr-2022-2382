@@ -1,0 +1,44 @@
+name: Plagiarism search
+
+on:
+  workflow_dispatch:
+
+jobs:
+  plag-search:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pull docker image
+        run: docker pull artanias/codeplag-ubuntu20.04:0.3.0
+
+      - name: Clone all branches
+        run: |
+          git clone https://github.com/Artanias/check_plag
+          cd check_plag
+          for branch in $(git branch --all | grep '^\s*remotes' | egrep --invert-match '(:?HEAD|main|master)$'); do
+              git branch --track "${branch##*/}" "$branch"
+          done
+        shell: bash
+
+      - name: Merge all branches
+        run: |
+          cd check_plag
+          git config --global user.email "robot@example.com"
+          git config --global user.name "robot"
+          git merge $(git branch | tr -s '\r\n*' ' ' | sed -r 's/main//' | sed -r 's/master//') -m "Merge all branches."
+        shell: bash
+
+      - name: Run plagiarism searching
+        run: |
+          cd check_plag
+          docker run --rm --volume $(pwd):/usr/src/works:ro --volume $(pwd)/reports:/usr/src/reports:rw "artanias/codeplag-ubuntu20.04:0.2.8" /bin/bash -c "codeplag settings modify --reports /usr/src/reports && codeplag check --extension py --directories /usr/src/works/"
+        shell: bash
+
+      - name: Save reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: reports
+          path: check_plag/reports/
+          retention-days: 3
+          if-no-files-found: error
