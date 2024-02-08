@@ -1,0 +1,26 @@
+name: test plagiat
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  run:
+    runs-on: self-hosted
+    steps:
+      - name: create reports
+        uses: test-github-action/pull-request-checker@plagiat
+        with:
+          github-token: ${{ github.token }}
+          repository-name: ${{ github.event.repository.full_name }}
+      
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: reports
+          path: /repository_files/plagiat_reports
+
+      
+      - name: check reports
+        run: |
+          ls /repository_files/plagiat_reports
