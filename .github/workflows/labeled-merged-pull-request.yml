@@ -30,7 +30,7 @@ jobs:
     - id: labeled-merged-pull-request
       name: Update grade
       if: success() && steps.find-pr.outputs.pr
-      uses: <pull-request-checker-repo>@<branch>
+      uses: test-github-action/pull-request-checker@label-action
       with:
         github-token: ${{ github.token }}
         number-of-pr: ${{ steps.find-pr.outputs.pr }}
